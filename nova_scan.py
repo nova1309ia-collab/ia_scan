@@ -15,168 +15,233 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap');
 
 :root{
-  --bg:#2a3d6b;
-  --bg2:#2f4475;
-  --blue:#4d8aff;
-  --blue-dim:rgba(77,138,255,.18);
-  --blue-glow:rgba(77,138,255,.35);
-  --cyan:#00e5ff;
-  --green:#00e676;
-  --amber:#ffc107;
-  --text:#e8eeff;
-  --muted:#8ba4cc;
-  --card:rgba(255,255,255,.05);
-  --border:rgba(77,138,255,.22);
-  --radius:16px;
+  --bg:#1e3058;
+  --bg2:#243868;
+  --bg3:#162544;
+  --blue:#5b96ff;
+  --blue2:#3a7bff;
+  --blue-dim:rgba(91,150,255,.16);
+  --blue-glow:rgba(91,150,255,.4);
+  --cyan:#38d9f5;
+  --green:#2ecc8a;
+  --amber:#f5c842;
+  --text:#eef2ff;
+  --muted:#7a9acc;
+  --border:rgba(91,150,255,.2);
+  --radius:18px;
+  --radius-sm:12px;
 }
 
-/* ── Base ── */
-html,body,[data-testid="stAppViewContainer"]{
-  background-color:var(--bg)!important;
+/* ── Reset & base ── */
+*{-webkit-font-smoothing:antialiased}
+html,body,[data-testid="stAppViewContainer"],[data-testid="stMain"]{
+  background:var(--bg)!important;
   color:var(--text);
   font-family:'DM Sans',sans-serif;
 }
+/* Fond avec texture subtile */
+[data-testid="stAppViewContainer"]::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(91,150,255,.18) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 90% 80%, rgba(56,217,245,.08) 0%, transparent 50%);
+  pointer-events:none;z-index:0;
+}
 [data-testid="stHeader"],[data-testid="stToolbar"],[data-testid="stDecoration"]{display:none!important}
 div[data-testid="stTextInput"]{display:none!important}
-.block-container{padding:1rem .8rem 2rem!important;max-width:480px!important}
-@media(max-width:480px){.block-container{padding:.75rem .6rem 2rem!important}}
+[data-testid="stFileUploader"]{display:none!important}
+.block-container{
+  padding:1.5rem 1rem 3rem!important;
+  max-width:460px!important;
+  position:relative;z-index:1;
+}
+@media(max-width:460px){.block-container{padding:1rem .7rem 2.5rem!important}}
 
 /* ── Header ── */
-.nova-title{
+.nova-header{
   text-align:center;
+  padding:1.2rem 0 .2rem;
+  margin-bottom:.2rem;
+}
+.nova-icon{
+  font-size:2.4rem;
+  display:block;
+  margin-bottom:.3rem;
+  filter:drop-shadow(0 0 12px rgba(56,217,245,.5));
+  animation:float 3s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.nova-title{
   font-family:'Syne',sans-serif;
-  font-size:2.1rem;
+  font-size:2rem;
   font-weight:800;
-  background:linear-gradient(135deg,#6ea8ff 0%,#4d8aff 50%,#00b4ff 100%);
+  background:linear-gradient(120deg,#a8c8ff 0%,#5b96ff 40%,#38d9f5 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  margin-bottom:.15rem;
-  letter-spacing:3px;
-  filter:drop-shadow(0 0 18px rgba(77,138,255,.4));
+  letter-spacing:4px;
+  line-height:1.1;
+  filter:drop-shadow(0 2px 12px rgba(91,150,255,.3));
 }
 .nova-subtitle{
-  text-align:center;font-size:.75rem;color:var(--muted);
-  margin-bottom:1.6rem;letter-spacing:2px;text-transform:uppercase;font-weight:500;
+  font-size:.72rem;color:var(--muted);
+  letter-spacing:3px;text-transform:uppercase;font-weight:400;
+  margin-top:.4rem;margin-bottom:1.8rem;
+  font-style:italic;
+}
+.nova-divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(91,150,255,.4),rgba(56,217,245,.3),transparent);
+  margin-bottom:1.6rem;
+  border:none;
 }
 
-/* ── Tabs ── */
-[data-testid="stTabs"] [role="tablist"]{
-  background:var(--bg2)!important;border-radius:14px!important;
-  padding:4px!important;border:1px solid var(--border)!important;gap:4px!important;
-}
-[data-testid="stTabs"] [role="tab"]{
-  border-radius:10px!important;font-family:'DM Sans',sans-serif!important;
-  font-weight:600!important;font-size:.88rem!important;
-  color:var(--muted)!important;padding:.55rem 1rem!important;transition:all .2s!important;
-}
-[data-testid="stTabs"] [role="tab"][aria-selected="true"]{
-  background:var(--blue-dim)!important;color:#fff!important;
-  box-shadow:0 0 16px var(--blue-glow)!important;
-}
-[data-testid="stTabs"] [role="tab"]:focus{box-shadow:none!important}
-[data-testid="stTabContent"]{padding-top:.8rem!important}
-
-/* ── File uploader (onglet Import) ── */
-[data-testid="stFileUploader"]{
-  background:rgba(77,138,255,.06)!important;
-  border:1.5px dashed rgba(77,138,255,.4)!important;
-  border-radius:var(--radius)!important;padding:.5rem!important;
-}
-[data-testid="stFileUploader"] section{border:none!important;background:transparent!important;padding:.5rem!important}
-[data-testid="stFileUploaderDropzoneInstructions"]{color:var(--muted)!important;font-size:.82rem!important}
-[data-testid="stFileUploaderDropzone"] button{
-  background:var(--blue-dim)!important;border:1px solid var(--blue)!important;
-  color:#fff!important;border-radius:10px!important;font-weight:600!important;
-  padding:.5rem 1.2rem!important;font-size:.85rem!important;
-}
-
-/* ── Camera input ── */
-[data-testid="stCameraInput"] video,[data-testid="stCameraInput"] img{border-radius:var(--radius)!important}
-[data-testid="stCameraInputButton"]{
-  background:linear-gradient(135deg,#4d8aff,#1565c0)!important;color:#fff!important;
-  border:none!important;border-radius:50px!important;padding:.7rem 2.5rem!important;
-  font-size:1rem!important;font-weight:700!important;letter-spacing:1px!important;
-  box-shadow:0 0 18px var(--blue-glow)!important;-webkit-tap-highlight-color:transparent!important;
-}
-
-/* ── Boutons ── */
+/* ── Bouton téléchargement ── */
 [data-testid="stDownloadButton"]>button{
-  background:linear-gradient(135deg,#4d8aff,#1565c0)!important;
-  color:#fff!important;border:none!important;border-radius:var(--radius)!important;
+  background:linear-gradient(135deg,#5b96ff 0%,#2563eb 100%)!important;
+  color:#fff!important;border:none!important;
+  border-radius:var(--radius)!important;
   font-family:'Syne',sans-serif!important;font-weight:700!important;
-  font-size:1.05rem!important;padding:1rem 2rem!important;width:100%!important;
-  letter-spacing:1.5px!important;box-shadow:0 4px 24px var(--blue-glow)!important;
-  min-height:56px!important;-webkit-tap-highlight-color:transparent!important;
-}
-[data-testid="stButton"]>button{
-  background:rgba(255,255,255,.03)!important;border:1px solid rgba(77,138,255,.3)!important;
-  color:var(--muted)!important;border-radius:12px!important;width:100%!important;
-  margin-top:.6rem!important;font-family:'DM Sans',sans-serif!important;
-  font-size:.9rem!important;min-height:48px!important;
+  font-size:1rem!important;padding:1rem 1.5rem!important;
+  width:100%!important;letter-spacing:2px!important;
+  box-shadow:0 6px 28px rgba(91,150,255,.45),0 1px 0 rgba(255,255,255,.15) inset!important;
+  min-height:58px!important;
   -webkit-tap-highlight-color:transparent!important;
+  transition:transform .15s,box-shadow .15s!important;
+  position:relative;overflow:hidden;
+}
+[data-testid="stDownloadButton"]>button::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.08) 0%,transparent 60%);
+  pointer-events:none;
+}
+[data-testid="stDownloadButton"]>button:active{
+  transform:scale(.97)!important;
+  box-shadow:0 2px 12px rgba(91,150,255,.3)!important;
 }
 
-/* ── Radio (mode rendu) ── */
-[data-testid="stRadio"]>div{display:flex!important;flex-direction:row!important;gap:6px!important;flex-wrap:nowrap!important;}
+/* ── Bouton reset ── */
+[data-testid="stButton"]>button{
+  background:rgba(255,255,255,.04)!important;
+  border:1px solid rgba(91,150,255,.25)!important;
+  color:var(--muted)!important;border-radius:var(--radius-sm)!important;
+  width:100%!important;margin-top:.7rem!important;
+  font-family:'DM Sans',sans-serif!important;font-size:.88rem!important;
+  min-height:48px!important;letter-spacing:.5px!important;
+  -webkit-tap-highlight-color:transparent!important;
+  transition:all .15s!important;
+}
+[data-testid="stButton"]>button:hover{
+  border-color:var(--blue)!important;color:#b8d0ff!important;
+  background:rgba(91,150,255,.06)!important;
+}
+
+/* ── Radio mode rendu ── */
+[data-testid="stRadio"]>div{
+  display:flex!important;flex-direction:row!important;
+  gap:6px!important;flex-wrap:nowrap!important;
+}
 [data-testid="stRadio"] label{
-  flex:1!important;background:rgba(77,138,255,.06)!important;
-  border:1.5px solid rgba(77,138,255,.2)!important;border-radius:12px!important;
-  padding:10px 4px!important;text-align:center!important;cursor:pointer!important;
-  font-size:.78rem!important;font-weight:600!important;color:var(--muted)!important;
-  transition:all .15s!important;min-height:46px!important;
+  flex:1!important;
+  background:rgba(91,150,255,.05)!important;
+  border:1.5px solid rgba(91,150,255,.18)!important;
+  border-radius:var(--radius-sm)!important;
+  padding:10px 4px!important;text-align:center!important;
+  cursor:pointer!important;font-size:.75rem!important;
+  font-weight:600!important;color:var(--muted)!important;
+  transition:all .18s!important;min-height:46px!important;
   display:flex!important;align-items:center!important;justify-content:center!important;
   -webkit-tap-highlight-color:transparent!important;
 }
 [data-testid="stRadio"] label:has(input:checked){
-  background:rgba(77,138,255,.22)!important;border-color:var(--blue)!important;
-  color:#fff!important;box-shadow:0 0 12px rgba(77,138,255,.25)!important;
+  background:linear-gradient(135deg,rgba(91,150,255,.25),rgba(56,217,245,.12))!important;
+  border-color:var(--blue)!important;color:#fff!important;
+  box-shadow:0 0 14px rgba(91,150,255,.2)!important;
 }
 [data-testid="stRadio"] input{display:none!important}
 
 /* ── Steps ── */
-.steps-row{display:flex;justify-content:center;gap:.4rem;margin-bottom:1.1rem;flex-wrap:wrap}
+.steps-row{
+  display:flex;justify-content:center;gap:.35rem;
+  margin-bottom:1.2rem;flex-wrap:wrap;
+}
 .step-badge{
-  background:rgba(77,138,255,.08);border:1px solid rgba(77,138,255,.2);
-  border-radius:30px;padding:5px 14px;font-size:.72rem;color:var(--muted);
-  white-space:nowrap;font-weight:500;
+  background:rgba(91,150,255,.07);
+  border:1px solid rgba(91,150,255,.18);
+  border-radius:30px;padding:5px 14px;
+  font-size:.7rem;color:var(--muted);white-space:nowrap;font-weight:500;
 }
 .step-active{
-  background:rgba(77,138,255,.22);border-color:var(--blue);color:#fff;
-  font-weight:700;box-shadow:0 0 10px rgba(77,138,255,.3);
+  background:linear-gradient(135deg,rgba(91,150,255,.28),rgba(56,217,245,.15));
+  border-color:var(--blue);color:#fff;font-weight:700;
+  box-shadow:0 0 12px rgba(91,150,255,.25);
 }
 
-/* ── Info / tip boxes ── */
+/* ── Card PDF info ── */
 .pdf-info{
-  background:rgba(0,229,255,.05);border:1px solid rgba(0,229,255,.18);
-  border-radius:var(--radius);padding:1rem 1.1rem;margin:1rem 0;font-size:.84rem;line-height:1.7;
+  background:linear-gradient(135deg,rgba(56,217,245,.05),rgba(91,150,255,.04));
+  border:1px solid rgba(56,217,245,.2);
+  border-radius:var(--radius);
+  padding:1rem 1.2rem;margin:1rem 0;
+  font-size:.83rem;line-height:1.8;
 }
 .pdf-info span{color:var(--cyan);font-weight:600}
+
+/* ── Tip box ── */
 .tip-box{
-  background:rgba(255,193,7,.05);border-left:3px solid var(--amber);
-  border-radius:0 12px 12px 0;padding:.75rem 1rem;font-size:.8rem;color:#c9a227;margin-bottom:1rem;
+  background:rgba(245,200,66,.05);
+  border-left:3px solid var(--amber);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  padding:.75rem 1rem;font-size:.8rem;color:#d4aa2a;margin-bottom:1rem;
 }
+
+/* ── Badges ── */
 .badge-crop,.badge-manual,.badge-no-crop{
-  display:inline-flex;align-items:center;gap:4px;border-radius:20px;
-  padding:3px 12px;font-size:.72rem;font-weight:600;margin-left:6px;
+  display:inline-flex;align-items:center;gap:4px;
+  border-radius:20px;padding:3px 12px;font-size:.71rem;font-weight:600;margin-left:6px;
 }
-.badge-crop{background:rgba(0,230,118,.1);border:1px solid var(--green);color:var(--green)}
-.badge-manual{background:rgba(77,138,255,.12);border:1px solid var(--blue);color:#82b1ff}
-.badge-no-crop{background:rgba(255,193,7,.1);border:1px solid var(--amber);color:var(--amber)}
+.badge-crop{background:rgba(46,204,138,.1);border:1px solid var(--green);color:var(--green)}
+.badge-manual{background:rgba(91,150,255,.12);border:1px solid var(--blue);color:#9ab8ff}
+.badge-no-crop{background:rgba(245,200,66,.1);border:1px solid var(--amber);color:var(--amber)}
+
+/* ── Preview label ── */
 .preview-label{
-  font-size:.72rem;color:var(--muted);text-align:center;
-  margin-bottom:.4rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;
+  font-size:.68rem;color:var(--muted);text-align:center;
+  margin-bottom:.5rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:500;
+  opacity:.8;
 }
-[data-testid="stImage"]{border-radius:var(--radius);overflow:hidden}
-.sep{border:none;border-top:1px solid rgba(77,138,255,.1);margin:1.4rem 0}
+[data-testid="stImage"]{
+  border-radius:var(--radius)!important;overflow:hidden!important;
+  box-shadow:0 8px 32px rgba(0,0,0,.25)!important;
+}
+
+/* ── Separator ── */
+.sep{
+  border:none;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(91,150,255,.25),transparent);
+  margin:1.5rem 0;
+}
+
+/* ── Spinner ── */
+[data-testid="stSpinner"] p{color:var(--muted)!important;font-size:.85rem!important}
+
+/* ── Scrollbar ── */
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="nova-title">📄 NOVA SCAN</div>', unsafe_allow_html=True)
-st.markdown('<div class="nova-subtitle">Numérisation instantanée · Zéro installation</div>', unsafe_allow_html=True)
+st.markdown("""
+<div class="nova-header">
+  <span class="nova-icon">🔍</span>
+  <div class="nova-title">NOVA SCAN</div>
+  <div class="nova-subtitle">Numérisation instantanée · Zéro installation</div>
+</div>
+<hr class="nova-divider">
+""", unsafe_allow_html=True)
 
 # ── Session state ──────────────────────────────────────────────────────────────
 if st.session_state.get("reset_requested"):
@@ -540,45 +605,105 @@ def flux_image(img_pil, nom_pdf, prefix):
             st.rerun()
 
 
-# ══ ONGLETS — Import en premier ════════════════════════════════════════════════
-tab_import, tab_cam = st.tabs(["🖼️  Importer", "📷  Caméra"])
+# ══ IMPORT ════════════════════════════════════════════════════════════════════
+fichier = st.file_uploader(
+    label="Choisir une image",
+    type=["jpg", "jpeg", "png", "webp", "bmp"],
+    label_visibility="collapsed",
+    key=f"upload_{sk}",
+)
+if fichier is None:
+    import streamlit.components.v1 as components
+    components.html("""<style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:transparent;font-family:'Segoe UI',sans-serif}
+    .card{
+      background:linear-gradient(145deg,rgba(91,150,255,.09),rgba(56,217,245,.04));
+      border:1.5px dashed rgba(91,150,255,.4);
+      border-radius:20px;padding:2rem 1.2rem 1.5rem;
+      margin-bottom:1rem;text-align:center;
+      box-shadow:0 4px 24px rgba(0,0,0,.15);
+      position:relative;overflow:hidden;
+    }
+    .card::before{
+      content:'';position:absolute;top:-40px;right:-40px;
+      width:120px;height:120px;border-radius:50%;
+      background:radial-gradient(circle,rgba(56,217,245,.12),transparent 70%);
+      pointer-events:none;
+    }
+    .icon{font-size:3.4rem;display:block;margin-bottom:.7rem;
+      animation:float 3s ease-in-out infinite;
+      filter:drop-shadow(0 4px 12px rgba(91,150,255,.4));
+    }
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+    .title{font-size:1.05rem;font-weight:700;color:#eef2ff;margin-bottom:.8rem;letter-spacing:.3px}
+    .formats{display:flex;justify-content:center;gap:.4rem;flex-wrap:wrap;margin-bottom:.8rem}
+    .fmt{
+      background:rgba(91,150,255,.14);
+      border:1px solid rgba(91,150,255,.28);
+      border-radius:8px;padding:3px 11px;
+      font-size:.7rem;color:#9ab8ff;font-weight:700;letter-spacing:.5px;
+    }
+    .tips{
+      display:flex;flex-direction:column;gap:.3rem;margin-top:.2rem;
+    }
+    .tip-item{
+      font-size:.75rem;color:#6a8ab8;
+      display:flex;align-items:center;justify-content:center;gap:.35rem;
+    }
+    .big-btn{
+      display:block;width:100%;
+      background:linear-gradient(135deg,#5b96ff 0%,#2563eb 100%);
+      color:#fff;border:none;border-radius:18px;
+      padding:1.15rem;font-size:1.05rem;font-weight:700;
+      cursor:pointer;
+      box-shadow:0 6px 28px rgba(91,150,255,.5),0 1px 0 rgba(255,255,255,.15) inset;
+      font-family:'Segoe UI',sans-serif;
+      -webkit-tap-highlight-color:transparent;
+      letter-spacing:.8px;
+      transition:transform .12s,box-shadow .12s;
+      position:relative;overflow:hidden;
+    }
+    .big-btn::after{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(180deg,rgba(255,255,255,.1) 0%,transparent 60%);
+      pointer-events:none;
+    }
+    .big-btn:active{transform:scale(.97);box-shadow:0 2px 12px rgba(91,150,255,.35)}
+    </style>
+    <div class="card">
+      <span class="icon">🖼️</span>
+      <div class="title">Importez votre document</div>
+      <div class="formats">
+        <span class="fmt">JPG</span>
+        <span class="fmt">PNG</span>
+        <span class="fmt">WEBP</span>
+        <span class="fmt">BMP</span>
+      </div>
+      <div class="tips">
+        <div class="tip-item">💡 Photo nette et bien éclairée</div>
+        <div class="tip-item">📐 4 coins du document visibles</div>
+        <div class="tip-item">🎨 Fond contrasté recommandé</div>
+      </div>
+    </div>
+    <button class="big-btn" onclick="openFile()">🖼️ &nbsp; Choisir une image</button>
+    <script>
+    function openFile(){
+      try{
+        const inp=window.parent.document.querySelector('input[type="file"]');
+        if(inp){inp.removeAttribute('capture');inp.setAttribute('accept','image/*');inp.click();return;}
+      }catch(e){}
+      const inp=document.createElement('input');
+      inp.type='file';inp.accept='image/*';inp.click();
+    }
+    </script>""", height=360, scrolling=False)
+else:
+    img_imp = corriger_orientation(Image.open(fichier))
+    flux_image(img_imp, fichier.name.rsplit(".", 1)[0] + ".pdf", "imp")
 
-# ── ONGLET 1 : IMPORT ────────────────────────────────────────────────────────
-with tab_import:
-    st.markdown('<div class="tip-box">💡 <strong>Formats :</strong> JPG, PNG, WEBP, BMP</div>',
-                unsafe_allow_html=True)
-    fichier = st.file_uploader(
-        label="Choisir une image",
-        type=["jpg", "jpeg", "png", "webp", "bmp"],
-        label_visibility="collapsed",
-        key=f"upload_{sk}",
-    )
-    if fichier is not None:
-        img_imp = corriger_orientation(Image.open(fichier))
-        flux_image(img_imp, fichier.name.rsplit(".", 1)[0] + ".pdf", "imp")
-
-# ── ONGLET 2 : CAMÉRA ────────────────────────────────────────────────────────
-with tab_cam:
-    photo = st.camera_input(
-        label="Prendre la photo",
-        label_visibility="collapsed",
-        key=f"cam_{sk}",
-    )
-    if photo is None:
-        st.markdown("""<div class="steps-row">
-            <div class="step-badge step-active">① Cadrer</div>
-            <div class="step-badge">② Capturer</div>
-            <div class="step-badge">③ PDF</div>
-        </div>""", unsafe_allow_html=True)
-        st.markdown("""<div class="tip-box">
-            💡 <strong>Conseil :</strong> Fond contrasté · Bonne lumière · 4 coins visibles
-        </div>""", unsafe_allow_html=True)
-    else:
-        img_cam = corriger_orientation(Image.open(io.BytesIO(photo.getvalue())))
-        flux_image(img_cam, "nova_scan_document.pdf", "cam")
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown("""<hr class="sep">
-<div style="text-align:center;font-size:.7rem;color:#4a6080;">
+<div style="text-align:center;font-size:.68rem;color:#3d5a80;letter-spacing:1px;">
 Nova Scan · Traitement 100 % en mémoire · Aucun fichier stocké</div>
 """, unsafe_allow_html=True)

